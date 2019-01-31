@@ -66,9 +66,16 @@ class _SampleAppPageState extends State<SampleAppPage> {
   }
 
   String cleanData(String dataShared) {
-    final index = dataShared.indexOf("https://");
+    var index = dataShared.indexOf("https://");
+    if (index == -1) {
+      index = dataShared.indexOf("http://");
+    }
 
-    return dataShared.substring(index);
+    if (index == -1) {
+      return dataShared;
+    } else {
+      return dataShared.substring(index);
+    }
   }
 }
 

@@ -27,6 +27,24 @@ class MainActivity : FlutterActivity() {
         createMethodChannel()
     }
 
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        val intent = intent ?: return
+
+        val action = intent.action
+        val type = intent.type
+
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type)) {
+                handleSendText(intent) // Handle text being sent
+            }
+        }
+
+        createMethodChannel()
+    }
+
     fun handleSendText(intent: Intent) {
         sharedText = intent.getStringExtra(Intent.EXTRA_TEXT)
     }
