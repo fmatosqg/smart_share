@@ -40,13 +40,14 @@ class _SampleAppPageState extends State<SampleAppPage> {
     return SafeArea(
       child: Scaffold(
           body: Padding(
-        padding: const EdgeInsets.all(32.0),
+        padding: const EdgeInsets.all(16.0),
         child: Center(
           child: ListView(
             children: <Widget>[
-              Text(dataShared + "aaa"),
-              ShareableWidget(originalText: dataShared),
-              ShareableWidget(originalText: dataSharedCleaned),
+//              Text(dataShared),
+              ShareableWidget(originalText: dataShared, title: "Original text"),
+              ShareableWidget(
+                  originalText: dataSharedCleaned, title: "Url only"),
             ],
           ),
 //          ),
@@ -81,10 +82,12 @@ class _SampleAppPageState extends State<SampleAppPage> {
 
 class ShareableWidget extends StatelessWidget {
   final String originalText;
+  final String title;
 
   TextEditingController _controller;
 
-  ShareableWidget({Key key, @required this.originalText}) : super(key: key) {
+  ShareableWidget({Key key, @required this.originalText, this.title})
+      : super(key: key) {
     _controller = TextEditingController(
       text: originalText,
     );
@@ -92,31 +95,42 @@ class ShareableWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.green[100],
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.symmetric(vertical: 8),
+    return Card(
+//      elevation: 4,
+//      clipBehavior: Clip.hardEdge,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(8.0),
+        ),
+        side: BorderSide(
+          width: 4,
+          color: Colors.green[100],
+        ),
+      ),
       child: Container(
         padding: EdgeInsets.all(8),
         color: Colors.white,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.end,
+        child: Column(
           children: <Widget>[
-            Flexible(
-              child: TextFormField(
-                maxLines: 5,
-                controller: _controller,
-//                decoration: InputDecoration(helperText: "Hello"),
+            TextField(
+              maxLengthEnforced: false,
+              controller: _controller,
+              maxLines: null,
+              decoration: InputDecoration(
+                labelText: title,
+                isDense: true,
+                filled: true,
+                fillColor: Colors.green[50],
               ),
             ),
-            Column(
+            Row(
               children: <Widget>[
                 MaterialButton(
                   child: Text("Share"),
                   color: Colors.green,
                   onPressed: () => Share.share(_controller.text),
                 ),
+                Spacer(),
                 MaterialButton(
                   child: Text("Browser"),
                   color: Colors.green,
